@@ -1,0 +1,101 @@
+%% Introducción sobre Modeling en IR de Baeza
+% - Introducción.
+% - Taxonomía.
+% - Carecterización formal de modelos IR.
+
+\section{Modelo booleano}
+	El modelo booleano es el modelo más simple dentro de los que puede implementar un sistema de recuperación de información. Para desarrollarlo, presentamos el siguiente ejemplo. Supongamos que se tiene a disposición las obras del poeta inglés William Shakespear llamada \textbf{Shakespear's Collected Works}. Supongamos también que queremos saber qué obras, dentro de la colección, contiene las palabras Brutus, Caesar pero no Calpurnia. Una forma de resolver la consulta anterior es la siguiente: supongamos que para cada documento (obra dentro de la colección \textbf{Shakespear's Collected Works}) si contiene o no cada una de las palabras que Shakespear utilizó al escribir las obras (Shakespear usó cerca de 32000 palabras diferentes). El resultado es una matriz llamada \textbf{matriz de incidencia término--documento}: $(t, d)$ es igual a 1 si y sólo si el documento en la columna $d$ contiene el término de la fila $t$, y es igual a 0 en caso contrario. La que sigue es parte de la matriz en cuestión tomando el ejemplo de la colección de obras de William Shakespear:
+	\begin{quote}
+		\[
+		\kbordermatrix{
+					& Antony \ and \ Cleopatra 	& Julius \ Caesar 	& 	The \ Tempest & 	Hamlet 	& Othello 	& Macbeth 	& ... \\
+		Antony		&	1					&		1		&		0		&	0		&	0		&	1		& \\
+		Brutus		&	1					&		1		&		0		&	1		&	0		&	0		& \\
+		Caesar		&	1					&		1		&		0		&	1		&	1		&	1		& \\
+		Calpurnia	&	0					&		1		&		0		&	0		&	0		&	0		& \\
+		Cleopatra	&	1					&		0		&		0		&	0		&	0		&	0		& \\
+		mercy		&	1					&		0		&		1		&	1		&	1		&	1		& \\
+		worser		&	1					&		0		&		1		&	1		&	1		&	0		& \\
+		...			&						&				&				&			&			&			&
+		}
+		\]
+	\end{quote}
+	
+	Dependiendo de la forma en que observamos la matriz término--documento es posible obtener un vector para cada término, el cual indica los documentos en los cuales aparece, ó un vector para cada documento, el cual muestra los términos que ocurren en él. \par
+	
+	Ahora, resolvamos la consulta del principio; es decir, recuperar todas aquellas obras de la colección que contiene las palabras Brutus, Caesar pero no Calpurnia. Podemos representar ésta consulta de forma booleana, de forma muy simple, de la siguiente manera: \texttt{Brutus AND Caesar AND NOT Calpurnia}. Luego, tomamos los vectores de \texttt{Brutus}, \texttt{Caesar} y el complemento de \texttt{Calpurnia} y los operamos:
+	\begin{quote}
+		\begin{ttfamily}
+			110100 AND 110111 AND 101111 = 100100
+		\end{ttfamily}
+	\end{quote}
+	El resultado anterior nos indica que los documentos los cuales satisfacen la consulta anterior son \textit{Antony and Cleopatra} y \textit{Hamlet}. \par
+	
+	El \textbf{\textit{modelo booleano}} es un modelo de recuperación de información en el cual podemos plantear cualquier consulta que se encuentre en forma de una expresión booleana de términos; es decir, en la cual los términos estén combinados con operadores AND, OR, y NOT, \cite{manning2009}. El modelo representa a cada documento como un conjunto de palabras.
+	
+	\subsection{Utilizando un índice invertido}
+		Supongamos que tenemos una colección con 1 millón de documentos y que cada documento tenga alrededor de 1000 palabras. Típicamente, habrá alrededor de 500 mil términos distintos en cada uno de éstos documentos. Las dimensiones anteriores varían respecto a diferentes colecciones, pero nos dan una idea de los problemas que tendremos que solucionar utilizando una matriz de incidencia término--documento. Tomando la suposición anterior, debemos construir una matriz término--documento de dimensión 500K $\times$ 1M: ésta posee medio trillón de 0's y 1's, demasiados para caber en la memoria de una computadora estándar. \par
+		
+		Una representación mucho mejor es sólo recordar los términos que ocurren; es decir, sólo las posiciones 1's. Esto nos lleva a la definición de índice invertido que se desarrolló anteriormente en el Capítulo 2: mantenemos un \textit{diccionario} de términos, luego, para cada término, una lista que guarda en qué documentos el término ocurre. Cada ítem de la lista anterior es llamado \textit{posting}; éste guarda el ID del documento. \par
+		
+		Para ganar beneficios de rapidez, el sistema de recuperación de información debe contruir el índice invertido antes de que un usuario realice una consulta. Se deben desarrollar los siguientes pasos:
+		\begin{enumerate}
+			\item Recolectar los documentos a ser indexados.
+			\item Convertir cada documento en una lista de tokens (\textit{Tokenization}).
+			\item Realizar precedimientos lingüísticos a la lista de tokens del paso 2 (\textit{Normalization}). De ésta forma se obtienen tokens normalizados los cuales, finalmente, serán los términos a indexar.
+			\item Indexar aquellos documentos en los cuales ocurren los términos obtenidos en el paso 3 creando un índice invertido.
+		\end{enumerate}
+		Los pasos 1--3 consisten en el procesamiento de textos que se desarrolló en el capítulo anterior. Mientras que la implementación del índice invertido (paso 4 de la lista anterior) se estudió en el Capítulo 2.
+		
+		% Figura 1.4 (manning2009)
+		
+		\subsection{Procesamiento de una consulta booleana}
+			Ahora, utilizando índices invertidos como estructura más eficiente para indexar documentos en un sistema de recuperación de información, ¿cómo procesamos una consulta booleana?. Consideremos la siguiente consulta en el modelo booleano sobre el índice invertido presentado en la figura anterior:
+			\begin{quote}
+				\begin{ttfamily}
+					Brutus AND Calpurnia
+				\end{ttfamily}
+			\end{quote}
+			El sistema ejecuta los siguientes pasos:
+			\begin{enumerate}
+				\item Localizar \texttt{Brutus} en el diccionario de términos.
+				\item Devolver sus \textit{postings}.
+				\item Localizar \texttt{Calpurnia} en el diccionario de términos.
+				\item Devolver sus \textit{postings}.
+				\item Intersectar las listas de \textit{postings} de los pasos 2 y 4.
+			\end{enumerate}
+			Como resultado final, tenemos que la consulta en cuestión se satisface en los documentos 2 y 31 como bien se muestra a continuación:
+			\begin{quote}
+				\begin{tabular}{lll}
+					Brutus & $\longrightarrow$ & \fbox{1}$\rightarrow$\fbox{2}
+												$\rightarrow$\fbox{4}
+												$\rightarrow$\fbox{11}
+												$\rightarrow$\fbox{31}
+												$\rightarrow$\fbox{45}
+												$\rightarrow$\fbox{173}
+												$\rightarrow$\fbox{174} \\
+					Calpurnia & $\longrightarrow$ & \fbox{2}$\rightarrow$\fbox{31}
+												$\rightarrow$\fbox{54}
+												$\rightarrow$\fbox{101} \\
+					Intersección & $\Longrightarrow$ & \fbox{2}$\rightarrow$\fbox{31}
+				\end{tabular}
+			\end{quote}
+			
+		\subsection{El modelo booleano ante modelos de \textit{ranking} de relevancia}
+			Dada una colección de documentos $D$. Sean $d_j \in D$ y $q$ una consulta. Por lo aprendido anteriormente, el documento $d_j$ será relevante ante la consulta $q$ si o sólo si los términos contenidos en la representación del documento en cuestión hacen verdadera a la expresión booleana de la consulta $q$. A lo anterior se lo llama \textit{ranking} de un documento $d_j$ ante una consulta $q$, y lo notamos $R(d_j,q)$. Claramente, es un \textit{ranking} booleano y es la principal desventaja del modelo booleano ante otros modelos de recuperación de información más complejos: las consultas booleanas sólo devuelven un conjunto de documentos el cual no es posible ordenar ya que todos son igual de importantes. \par
+			
+			Por lo tanto, nos encontramos con un modelo simplista e imposible de satisfacer ciertas necesidades como, por ejemplo:
+			\begin{itemize}
+				\item Poder escribir consultas en lenguaje natural en vez de en álgebra booleana, la cual sólo tienen conocimientos científicos de la información.
+				\item Podríamos tener, también, la necesidad de realizar consultas de \enquote{proximidad} como por ejemplo \texttt{Gates NEAR Microsoft}. Para realizar ésto, el índice tiene que tener la capacidad de capturar proximidades de términos en documentos.
+				\item El modelo booleano sólo almacena la presencia o ausencia de un término, pero comúnmente qusieramos acumular evidencia, dando más \enquote{peso} (importancia) a documentos quienes contienen un determinado término varias veces en contraposición a aquellos quienes los contienen una sóla vez. Para realizar ésto debemos tener un método para obtener la frecuencia de un término en un documento en listas de \textit{postings}.
+				\item Poder ordenar, en orden de relevancia, los documentos que devuelve el sistema ante una determinada consulta escrita por un usuario.
+			\end{itemize}
+			
+			Las necesidades anteriores se satisfacen en modelos de \textit{ranking} de relevancia como se desarrollarán en las próximas secciones. Es decir, en aquellos modelos de recuperación de información los cuales la función \textit{ranking}, $R$, que emplean no es binaria, como la que emplea el modelo booleano.
+
+\section{Modelo vectorial}
+
+\section{Modelo probabilístico}
+
+\section{Comparación entre modelos}

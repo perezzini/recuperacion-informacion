@@ -1,0 +1,124 @@
+Recordemos los cuatro grandes pasos en la construcción de un índice:
+\begin{enumerate}
+	\item Recolectar los documentos a ser indexados.
+	\item Realizar el proceso \textit{tokenization} al texto.
+	\item Realizar un procedimiento linguistico al los \textit{tokens} obtenidos en el paso anterior.
+	\item Indexar, a cada \textit{token}, los documentos en los cuales aparece.
+\end{enumerate}
+
+En éste capítulo desarrollaremos los primeros tres pasos de la enumeración anterior; es decir, veremos cómo, dado una colección de documentos, extraer \textit{tokens} de los textos y luego realizarles un procedimiento linguístico para obtener los términos (\textit{keywords}) que, finalmente, serán indexados.
+
+\section{Obteniendo la secuencia de caracteres en un documento}
+	Típicamente, los documentos a ser indexados son bytes en un archivo o en un servidor web. El primer paso en el procesamiento de documentos es convertir éstas secuencias de bytes en una secuencia de caracteres. Este suele ser un procedimiento complicado ya que se debe determinar en qué esquema de codificación están codificadas las secuencias de caracteres, como por ejemplo Unicode UTF-8 o varios estándares comerciales. Para determinar el esquema en cuestión se utilizan procedimientos de Machine Learning, métodos heurísticos o utilizando metadata especificada en el documento mismo. Una vez que el esquema es determinado, se decodifica la cadena de bytes obteniendo así una cadena de caracteres.
+	
+\section{Determinando el vocabulario de términos}
+	\subsection{\textit{Tokenization}}
+		Dada una secuencia de caracteres, \textit{tokenization} es la tarea de cortarla en pedazos, llamados \textit{tokens}, y también, quizás al mismo tiempo, deshechar ciertos caracteres tales como aquellos de puntuación, \cite{manning2009}. Veamos un ejemplo:
+		\begin{quote}
+			Entrada: Friends, Romans, Countrymen, lend me your ears; \\
+			Salida: \fbox{Friends} \fbox{Romans} \fbox{Countrymen} \fbox{lend} \fbox{me} \fbox{your} \fbox{ears}
+		\end{quote}
+		
+		Veamos las siguientes definiciones. Un \textit{token} es una instancia de una secuencia de caracteres. Un \textit{tipo} es la clase de todos los tokens que contienen la misma secuencia de caracteres. Un \textit{término} es un, probablemente normalizado, tipo el cual está incluido en el diccionario del sistema de recupereación de información. Estos últimos derivan de tokens aunque procesados por distintas técnicas de normalización que se detallarán más adelante. Como ejemplo, si el documento a ser indexado es \textit{to sleep perchance to dream}, luego habrá 5 tokens pero sólo 4 tipos (ya que existen dos instancias de la palabra \textit{to}), y por lo tanto 4 términos.
+		
+		Durante el proceso de \textit{tokenization} suele haber distintas dificultades dependiendo del idioma del texto. Es decir, muchas veces se debe elegir qué tokens utilizar. En un caso \enquote{normal} se procede de manera trivial: se toma la secuencia de caracteres de entrada, se identifican espacios en blanco, se \textit{cortan} y se deja de lado signos de puntuación; de ésta forma obtenemos los tokens. Pero no todo es tan fácil. Por ejemplo, el idioma inglés suele representar ciertos problemas: ¿qué se debe hacer con el uso de los apóstrofes?. Veamos el siguiente documento:
+		\begin{quote}
+			Mr. O'Neill thinks that the boys' stores about Chile's capital aren't amusing.
+		\end{quote}
+		
+		Tomando la palabra \textit{O'Neill}, existen diferentes formas de \textit{tokenization}. Pero, ¿cuál consideramos como la \enquote{correcta}?:
+		\begin{quote}
+			\begin{ttfamily}
+				\fbox{neill} \\
+				\fbox{oneill} \\
+				\fbox{o'neill} \\
+				\fbox{o'} \fbox{neill} \\
+				\fbox{o} \fbox{neill} \\
+			\end{ttfamily}
+		\end{quote}
+		
+		Lo mismo sucede, en el documento anterior, con la palabra \textit{aren't}. Veamos:
+		\begin{quote}
+			\begin{ttfamily}
+				\fbox{aren't} \\
+				\fbox{arent} \\
+				\fbox{are} \fbox{n't} \\
+				\fbox{aren} \fbox{t} \\
+			\end{ttfamily}
+		\end{quote}
+		
+		Elegir ciertas posibilidades como \enquote{correctas} puede traer distintas consecuencias. Una consulta booleana como \texttt{neill AND capital} será exitosa en tres casos pero no en los otros tres. Razonablemente, para consultas booleanas como también para consultas de lenguaje natural (\textit{free--text queries}) se requiere que se realice exactamente el mismo procedimiento de \textit{tokenization} de documentos y consultas. Esto se hace, generalmente, procesando consultas con el mismo \textit{tokenizer}. \par
+		
+		Las Ciencias de la Computación ha introducido nuevas cadenas de caracteres las cuales un \textit{tokenizer} debería devolverlas como un solo token; éstas, por ejemplo, son: direcciones de e--mail, URLs, direcciones numéricas de IP, y más. Una posibildad es no omitir de los índices las cadenas anteriores, pero resultaría una gran desventaja para aquellos usuarios del sistema de recuperación de información no poder buscar por éstas cadenas. \par
+		
+		Cortar palabras mediante espacios en blanco puede dividir aquellas secuencias de caracteres las cuales deben ser consideradas como un solo token. Esto ocurre generalmente con nombres (\textit{Santa Fe, Argentina}), números de teléfonos y fechas (\textit{24 de mayo de 2016}). Esto puede resultar en una mala recuperación de información. \par
+		
+		Resumiendo, cada idioma trae diferentes \enquote{problemas} en cuanto a cómo debe realizarse el proceso de \textit{tokenization}. Algunos idiomas presentas dificultades más complejas que otros. Por lo tanto, una forma que tiene éste procedimiento de sortear éstas dificultades es mediante una técnica denominada \textit{Identificación de Lenguaje}. Esta técnica usa modelos de \textit{Machine Learning}, Inteligencia Artificial, entre otras, para reconocer específicos patrones en la secuencia de caracteres y así, finalmente, identificar el idioma.
+		
+	\subsection{\textit{Stop words}}
+		Se denominan \textit{stop words} a aquellas palabras que son extremadamente comunes y que no aportan un gran valor a la hora de indexar documentos. Estas palabras son excluidas totalmente del vocabulario de términos. Para ejemplificar, a continuación se nombran algunas de las tantas consideradas \textit{stop words} del idioma español:
+		\begin{quote}
+			\begin{ttfamily}
+				un \\
+				desde \\
+				cierto \\
+				ir \\
+				vamos \\
+				tiene \\
+				es				
+			\end{ttfamily}
+		\end{quote}
+		
+		La forma de determinar una lista de \textit{stop words} es ordenando los términos, de un documento, mediante frecuencia de términos (es decir, el número total de veces cada que término aparece en un documento) y luego quitar de la lista aquellos más frecuentes. Una vez que se completa ésta lista de \textit{stop words}, sus términos son descartados a la hora de indexar los documentos dentro de la respectiva colección. Descartar \textit{stop words} de una colección de documentos, reduce notablemente el número de \textit{postings} el sistema de recuperación de información debe almacenar. \par
+		
+		Muchas veces, descartar \textit{stop words} puede que el sistema no recupere la información que verdaderamente estamos buscando. Un ejemplo de lo anterior puede ser la consulta \texttt{vuelos a Buenos Aires}: si aquí, el sistema, descarta la palabra \texttt{a} (la cual es un \textit{stop word}) se tendrá como consulta resultante \texttt{vuelos Buenos Aires}. El sistema, ante una consulta como la última, no nesariamente devolverá aquellos vuelos que se dirigan a Buenos Aires, sino también aquellos vuelos que salen de Buenos Aires; perdiendo así el significado de la consulta original. Otras determinadas consultas se ven afectadas. Entre ellas, títulos de canciones y versos los cuales consisten, comúnmente, en \textit{stop words}. Para ejemplificar lo anterior, sea el siguiente verso de William Shakespear: \textit{To be or not to be}. \par
+		
+		En los primeros sistemas de recuperación de información las listas de \textit{stop words} eran considerablemente largas: entre 200 y 300 términos. Luego, con el tiempo, éstas listas fueron disminuyendo (de 7 a 12 términos) hasta, finalmente, no utilizarlas. Los motores de búsqueda en la Web, por lo general, no utilizan listas de \textit{stop words}: utilizando buenas técnicas de compresión se reducen los costos de almacenamiento de \textit{postings} de palabras comunes.
+		
+	\subsection{Normalización de tokens}
+		Hasta ahora, hemos detallado el proceso de documentos en una colección de la siguiente forma:
+		\begin{enumerate}
+			\item Se toma como entrada un documento: un archivo de bytes.
+			\item Se convierte la secuencia de bytes anterior en una secuencia de caracteres.
+			\item Se toma la secuencia de caracteres anterior y se le realiza el procedimiento llamado \textit{tokenization}: se corta en \textit{pedazos} para obtener tokens.
+		\end{enumerate}
+		Sin embargo, muchas veces resulta que existen dos secuencias de caracteres que no son del todo iguales pero que significan lo mismo y se quiere que, obviamente, indexen los mismos documentos. Por ejemplo, si un usuario busca la palabra \textit{USA} éste espera que el sistema de recuperación de información devuelva documentos los cuales contiene el término \textit{USA} como también \textit{U.S.A}. \par
+		
+		La normalización de tokens es el proceso de canonizar tokens con el objetivo de \textit{igualar} términos a pesar de algunas diferencias en sus secuencias de caracteres, \cite{manning2009}. Existen diversos métodos de normalización de tokens. Entre ellos, el método  mas estándar, es crear clases de equivalencias, que son nombradas por alguno de los miembros de las clases. Como ejemplo, tomemos los tokens \texttt{anti-discriminatorio} y \texttt{antidiscriminatorio}. Utilizando el método anterior, se creará una clase de equivalencia llamada, por ejemplo, \textit{antidiscriminatorio} y \enquote{almacenará} los dos tokens anteriores; luego, las búsquedas por uno de los términos devolverá documentos que contienen el otro término, y viceversa. \par
+		
+		A continuación se presentan algunas formas de normalización que son comúnmente implementadas por sistemas de normalización de tokens. En muchos casos éstas técnias pueden llegar a ser muy útiles pero tambien dañinas.
+		\begin{itemize}
+			\item \textbf{Signos diacríticos}. El español es uno de los idiomas en los cuales se utilizan éstos símbolos. Un signo diacrítico es un signo gráfico que confiere a los signos escritos (no necesariamente letras) un valor especial. Entre ellos se encuentran los acentos ortográficos (\ \' \ ) y (\ \` \ ), la diérisis (\ \" \ ), la virguililla de la \textit{ñ} y la coma (,), entre otros. En un sistema de recuperación de información querremos que el mismo, ante una consulta como \texttt{películas} y \texttt{pelicula}, devuelvan exactamente los mismos documentos; es decir, que el sistema discrimine el acento ortográfico. Esto puede relizarse normalizando tokens eliminando los signos diacríticos. Lo anterior puede causar problemas, ya que muchas veces los signos diacríticos asignan significados a ciertas palabras. Por ejemplo, en el idioma español, \textit{peña} no significa lo mismo que \textit{pena}. Sin embargo, no siempre se debe prestar atención a la lingüística del idioma, sino a cómo los usuarios escriben sus consultas. Estos, generalmente, las escriben omitiendo signos diacríticos por razones de velocidad o hábitos. En éstos casos, la respuesta es igualar todas las palabras a aquellas sin diacríticos.
+			\item \textbf{Conversión a minúsculas}. Esta estrategia sugiere convertir todas las letras de una palabra a minúsculas. Por lo general es una muy buena estrategia, ya que igualará  términos como, por ejemplo, \texttt{iPod} a \texttt{ipod}. Pero, también, ésta estrategia puede provocar incidentes. Por ejemplo, en el idioma inglés, si un usuario ingresa como consulta la palabra \texttt{US} (acrónimo de \textit{United States}) el sistema la igualará con la palabra \texttt{us} la cual quiere decir \textit{nosotros}. Por lo tanto, no sólo recuperará información acerca del país Estados Unidos. Una alternativa para solucionar éstos inconvenientes es transformar a minúsculas sólo determinadas letras dentro de una palabra. La heurística más simple es convertir a minúsculas palabras que se encuentren en el comienzo de una oración y todas aquellas palabras que ocurren en un título (que, por lo general, se encuentran en mayúsculas por cuestión de diseño). 
+		\end{itemize}
+		
+	\subsection{\textit{Stemming} y \textit{Lemmatization}}
+		Ahora, no todos los documentos utilizan palabras de la misma forma; aunque, al fin y al cabo, quieran decir -- interpretar -- lo mismo. Por ejemplo: \textit{acción}, \textit{accionar}, \textit{accionando}. Razonablemente, pretendemos que todo sistema de recuperación de información, al buscar cualquiera de éstas palabras, devuelva aquellos documentos que también cotengan otras palabras derivadas. \par
+		
+		Según \cite{manning2009}, \textit{Stemming} usualmente refiere a procesos heurísticos que \enquote{cortan} los finales de palabras. Mientras que \textit{Lemmatization} usualmente refiere a relizar estudios morfológicos a palabras con el propósito de eliminar finales flexivos para retornar la forma base de las mismas, llamadas \textit{lemmas}. Siguiendo el ejemplo de \cite{manning2009}, si se topa con la palabra \textit{saw}, del idioma inglés, \textit{stemming} probablemente devolverá sólo \textit{s}, mientras que \textit{lemmatization} intentará devolver \textit{see} ó \textit{saw} dependiendo si el token se utiliza como verbo o sustantivo. \par
+		
+		\textit{Stemming} y \textit{lemmatization} son realizados con la ayuda de componentes adicionales de software que son agregados al proceso de indexado. Existen numerosos componentes de software libre como también comerciales. \par
+		
+		Entre los diversos métodos de \textit{stemming} se encuentra un algoritmo escrito en 1979 en Cambridge (Inglaterra) por el Dr. Martin Porter. El algoritmo es comúnmente conocido como \textbf{Porter \textit{stemmer}} y es el \textit{stemmer} más popular para el idoma inglés. \par
+		El algoritmo de Porter consiste en 5 fases de reducción de palabras aplicadas secuencialmente, las cuales no se detallarán aquí en su totalidad. De \cite{porterSpammer}, la primera fase aplica las siguientes reglas:
+		\begin{quote}
+			\textbf{Regla} \\
+			SSES $\rightarrow$ SS \\
+			IES $\rightarrow$ I \\
+			SS $\rightarrow$ SS \\
+			S $\rightarrow$  \\
+			donde '$\rightarrow$' indica \enquote{reemplazar}.
+		\end{quote}
+		Como ejemplo de cada una de las reglas anteriores, veamos:
+		\begin{quote}
+			\textbf{Ejemplo} \\
+			carasses $\rightarrow$ caress \\
+			ponies $\rightarrow$ poni \\
+			caress $\rightarrow$ caress \\
+			cats $\rightarrow$ cat \\
+		\end{quote}
+		
+		Ahora, en vez de utilizar un \textit{stemmer}, es posible utilizar un \textit{lemmatizer}. Estos son herramientas de procesamiento de lenguaje natural las cuales hacen un análisis morfológico completo de palabras para determinar sus correspondientes \textit{lemmas}. Realizar éstos análisis proveen beneficios para la recuperación de información. \par
+		
+		Utilizar un \textit{stemmer} ó un \textit{lemmatizer} puede traer diversos problemas para ciertos idiomas en ciertos casos. Es decir, reemplazar un \textit{stemmer} por un \textit{lemmatizer} ó un \textit{lemmatizer} por un \textit{stemmer} no necesariamente soluciona problemas.
+					

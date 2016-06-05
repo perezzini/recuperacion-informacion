@@ -1,0 +1,161 @@
+\documentclass[11pt, spanish]{report}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, top=2.50cm, bottom=2.50cm, left=2.50cm, right=2.50cm]{geometry}
+
+% Quotes
+\usepackage[autostyle]{csquotes}
+
+% Times New Roman font (use on the entire report)
+\usepackage{times}
+
+% Last page
+\usepackage{lastpage}
+
+% Footer
+\usepackage{fancyhdr}
+\fancyhf{}
+\pagestyle{fancy}
+% delete header line
+\renewcommand{\headrulewidth}{0pt}
+% right footer
+\rfoot{pág. \thepage\ de \pageref{LastPage}}
+
+% Interlineado
+\renewcommand{\baselinestretch}{1.5}
+
+% Distancia entre párrafos
+\setlength{\parskip}{6pt}
+
+% Para usar el símbolo R (Reales), por ejemplo
+\usepackage{amssymb}
+
+% Carpeta de imágenes
+\usepackage{graphicx}
+\usepackage{caption,subcaption}% http://ctan.org/pkg/{caption,subcaption}
+\graphicspath{{images/}}
+
+% Lib: Matrices con índices (labels)
+\usepackage{libs/kbordermatrix}% http://www.hss.caltech.edu/~kcb/LaTeX.shtml
+\newcommand{\noindex}{\hspace*{-0.8em}}%
+
+\bibliographystyle{apalike}
+
+% Título
+\title{
+	{\huge Sistemas de Recuperación de Información}\\
+	{\Large Universidad Nacional de Rosario}\\
+	{\large Facultad de Ciencias Exactas, Ingeniería y Agrimensura}\\
+	{\small Licenciatura en Ciencias de la Computación}\\
+	{\small {\itshape Bases de Datos Avanzadas}}
+}
+\author{Luciano Perezzini \and Estanislao Ruiz Sorazábal}
+\date{Day Month Year}
+
+
+\begin{document}
+	\maketitle
+	
+	\chapter*{Resumen}
+		\input{chapters/resumen}
+				
+	% Indice
+	\tableofcontents
+	
+	\chapter{Introducción}
+		\input{chapters/introduccion}
+		
+	\chapter{Indexado}
+		\input{chapters/indexado}
+		
+	\chapter{Procesamiento de Texto}
+		\input{chapters/procesamiento-de-texto}
+		
+	\chapter{Lenguajes de Consulta}
+		\input{chapters/lenguajes-de-consulta}
+		
+	\chapter{Modelos de Recuperación de Información}
+		\input{chapters/modelos}
+		
+	\chapter{Evaluación}
+		\input{chapters/evaluacion}
+		
+	\chapter{Buscando en la Web}
+		\input{chapters/en-la-web}
+
+	\chapter{Estado del Arte}
+		\input{chapters/estado-del-arte}
+
+	\chapter{Conclusión}
+		\input{chapters/conclusion}
+	
+	% Añade bibiliografia al índice	
+	\addcontentsline{toc}{chapter}{Bibliografía}
+		
+	\begin{thebibliography}{56}
+		% "et al." = "entre otros"
+		
+		% libro
+		\bibitem[Manning et al., 2009]{manning2009}
+  			C. D. Manning, P. Raghavan y H. Schutze.
+  			\textit{An Introduction to Information Retrieval}.
+  			Cambridge University Press, 
+  			2009.
+  		
+  		% libro	
+  		\bibitem[Baeza--Yates et al., 1999]{baeza1999}
+  			R. Baeza--Yates y B. Ribeiro-Neto.
+  			\textit{Modern Information Retrieval}.
+  			Addison--Wesley, 
+  			1999.
+  		
+  		% libro	
+  		\bibitem[Ullman et al., 2014]{ullman2014}
+  			J. D. Ullman, J. Leskovec y A. Rajaraman.
+  			\textit{Mining of Massive Datasets}.
+  			Stanford University, 
+  			2014.
+  			
+  		% paper	
+  		\bibitem[Dridi et al., 2014]{dridi2014}
+  			A. Dridi y M. Kacimi. 
+  			\textit{Information Retrieval Framework based on Social Document Profile}. 
+  			En CAiSE Forum/Doctoral Consortium, Thessaloniki, Grecia, 2014.
+  		
+  		% paper	
+  		\bibitem[King et al., 2010]{king2010}
+  			I. King, M. R. Lyu y H. Ma. 
+  			\textit{Introduction to Social Recommendation}. 
+  			En WWW2010, North Carolina, USA, 2010.
+
+		% paper	
+  		\bibitem[Jamali et al., 2009]{jamali2009}
+  			M. Jamali y Martin Ester. 
+  			\textit{TrustWalker: a random walk model for combining trust-based and item-based recommendation}. 
+  			En Proceedings of the 15th ACM SIGKDD international conference on Knowledge discovery and data mining (KDD '09), ACM, New York, USA, 2009.
+  			
+  		% paper	
+  		\bibitem[Guy et al., 2011]{guy2011}
+  			I. Guy y D. Carmel. 
+  			\textit{Social Recommender Systems}. 
+  			En WWW2011, India, 2011.
+  		
+  		% revista
+  		\bibitem[Tang et al., 2013]{tang2013}
+  			J. Tang, X. Hu y H. Liu, 
+  			\textit{Social Recommendation: A Review}. 
+  			Springer, 
+  			noviembre de 2013. 
+  			pp ??
+  		
+  		% página web	
+  		\bibitem[Tartarus]{porterSpammer}
+  			\texttt{tartarus.org/martin/PorterStemmer/def.txt}.
+  			Consultada en Mayo de 2016.
+  			
+	\end{thebibliography}
+		
+	\appendix
+\end{document}
