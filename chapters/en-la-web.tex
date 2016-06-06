@@ -274,7 +274,7 @@ Podemos considerar a la World Wide Web (más comúnmente conocida como sólo Web
 			Calcular los autovectores izquierdos es una operación crítica dentro del método PageRank. En particular, existe un método llamado \textit{power iteration}. Como vimos, sea $\vec{x}$ la distribución inicial, luego la distribución en el tiempo $t$ es $\vec{x}P^{t}$. A medida que $t$ crece, deberíamos esperar que la distribución $\vec{x}P^{t}$ sea muy similar a la distribución $\vec{x}P^{t + 1}$. El método \textit{power iteration} simula la caminata del usuario en la Web: comienza en un estado (nodo del \textit{web graph}) y realiza la caminata en $t$ largos números de pasos, recordando la frecuencia de visita de cada nodo. Después de un gran número de pasos $t$, las frecuencias anteriormente mencionadas tienden a \enquote{establecerse}; es decir, no se producen grandes variaciones de frecuencias. Decimos que éstas frecuencias son los valores \textit{PageRank} de cada nodo.
 			
 			\begin{quote}
-				Retomemos el como ejemplo el \textit{web graph} del Ejemplo 8.1 anterior. Tenemos que la matriz de distribución de probabilidades es la siguiente:
+				Retomemos el \textit{web graph} del Ejemplo 8.1 anterior. Tenemos que la matriz de distribución de probabilidades es la siguiente:
 				\[
 				P =
 				\begin{bmatrix}
@@ -295,4 +295,12 @@ Podemos considerar a la World Wide Web (más comúnmente conocida como sólo Web
 														1/6 & 2/3 & 1/6	
 													\end{bmatrix} = (1/3 \ 1/3 \ 1/3) = \vec{x}_2
 				\end{equation}
+				En tres pasos:
+				\begin{equation}
+					\vec{x}_3 = (1/4 \ 1/2 \ 1/4)
+				\end{equation}
+				
+				Utilizando \textit{power iteration}, en éste ejemplo, se concluye que la distribución converge a $\vec{x} = (5/18 \ 4/9 \ 5/18)$. Luego, los valores \textit{PageRank} de cada nodo del \textit{web graph} anterior son $\vec{\pi} = (5/18 \ 4/9 \ 5/18)$.
 			\end{quote}
+			
+			Como conlusión, los motores de búsqueda en la Web ordenan resultado utilizando medidas de calidad. Una de ellas es PageRank. PageRank es uno de los muchos factores que un motor puede utilizar a la hora de brindar un puntaje a una página web ante una cierta consulta de usuario.
