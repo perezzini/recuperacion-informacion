@@ -270,7 +270,7 @@
 				P(S_u = v) = \frac{T_{u,v}}{\sum_{w \in TU_u} T_{u,w}} = \frac{1}{|TU_u|}
 			\end{equation}
 			
-			Con probabilidad $\phi_{u,i,k}$, si decidimos detener la caminata aleatoria en el usuario $u$, debemos seleccionar uno de los ítems calificados por $u$ que sea similar al ítem objetivo $i$. Para ésto, se debe definir una medida de similitud entre ítems, $sim(i,j)$, la cual se desarrollará más adelante. Luego, para cada ítem $j \in RI_u$, se asigna una probabilidad de selección proporcional a la similitud entre $i$ y $j$, la cual \cite{jamali2009} define así:
+			Finalmente, se debe analizar el caso restante. Con probabilidad $\phi_{u,i,k}$, si decidimos detener la caminata aleatoria en el usuario $u$, debemos seleccionar uno de los ítems calificados por $u$ que sea similar al ítem objetivo $i$. Para ésto, se debe definir una medida de similitud entre ítems, $sim(i,j)$, la cual se desarrollará más adelante. Luego, para cada ítem $j \in RI_u$, se asigna una probabilidad de selección proporcional a la similitud entre $i$ y $j$, la cual \cite{jamali2009} define así:
 			\begin{equation}
 				P(Y_{u,i} = j) = \frac{sim(i,j)}{\sum_{l \in RI_u} sim(i,l)}
 			\end{equation}
@@ -284,6 +284,24 @@
 			
 			El tamaño de $UC_{i,j}$ es importante ya que, por ejemplo, si $corr(i,j) = corr(i,l)$ pero $|UC_{i,j}| > |UC_{i,l}|$, entonces $i$ y $j$ han sido calificado por más usuarios en común. Luego, la correlación entre los ítems es mayor y $sim(i,j)$ debe ser mayor que $sim(i,l)$. \cite{jamali2009} propone la similitud entre dos ítems $i$ y $j$, como sigue:
 			\begin{equation}
-				sim(i,j) = \frac{1}{1 + \exp{-\frac{|UC_{i,j}|}{2}}} \times corr(i,j)
+				sim(i,j) = \frac{1}{1 + e^{-\frac{|UC_{i,j}|}{2}}} \times corr(i,j)
 			\end{equation}
+			
+			\begin{quote}
+				\textit{Función sigmoide}. Una función sigmoide es una función real diferenciable acotada que se define para todos los valores reales de las entradas y tiene una derivada positiva en cada punto \cite{han1995}.
+				
+				\begin{equation}
+					S(t) = \frac{1}{1 + e^{-t}}
+				\end{equation}
+				
+				\begin{figure}[h]
+					\includegraphics[width=8cm]{sigmoide}
+					\centering
+					\caption{Función sigmoide}
+				\end{figure}
+				
+				Esta función permite describir procesos la evolución de muchos procesos naturales y curvas de aprendizaje de sistemas complejos. Estos tienen una progresión temporal desde unos niveles bajos al inicio, hasta hacercarse a un \enquote{climax} transcurrido un cierto tiempo.
+			\end{quote}
+			
+		Aquí, en TrustWalker, la función simoide se utiliza para evitar favorecer demasiado el tamaño del conjunto $UC_{i,j}$ y mantener la similitud en el rango [0,1].
 			 
