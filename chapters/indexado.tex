@@ -3,3 +3,11 @@
 % - Cómo construir índices invertidos (la estructura de datos más usada para construir un índice
 %	sobre documentos en una colección.
 % - Más...
+
+\section{Introducción}
+
+El propósito de crear y mantener un índice es optimizar y mejorar la recuperación de documentos relevantes a partir de una consulta de búsqueda. Con lo cual un sistema de recuperación sin un índice necesitaría revisar todos los documentos de la colección ante cada consulta lo que demandaría demasiado tiempo y poder computacional. El espacio necesario para almacenar el índice como el tiempo necesario para actualizarlo es compensado por este ahorro de tiempo ante cada recuperación de información del sistema. \par
+
+Se denomina indexación al procedimiento de construir un índice invertido de los términos sobre la colección de documentos. Esta estructura relaciona cada término con la lista de postings que contiene la referencia de los documentos en donde ocurre al menos una vez ese término. La lista de posting es ordenada por el identificador del documento. \\
+Es llamado también índice booleano ya que solo puede determinar si un término aparece en un documento o no, sin dar a conocer detalles como, por ejemplo la posición en el documento o la cantidad de ocurrencias. \par
+Completar...

@@ -96,6 +96,74 @@
 
 \section{Modelo vectorial}
 
+En ciertos contextos el uso de una asignación binaria en la importancia de un documento resulta muy limitante por eso surgió un modelo que permite realizar coincidencias parciales entre una consulta y los documentos de la colección. \\
+
+En este modelo, documentos y consultas se representan mediante vectores t dimensionales, donde t es el número total de términos. Cada componente del vector representa un peso que será asignado al término correspondiente en el documento o la consulta. \\
+
+Formalmente, Sea $k_{i}$ un término indexado del conjunto $V$ de términos, $d_{j}$ un documento en $D$ y $w_{i,j}$  el peso asociado a $(k_{i},d_{j})$ entonces definimos el vector $d_{j}= (w_{1,j}, w_{2,j}, … , w_{t,j})$. De manera análoga se representan las consultas. \\  
+
+Los pesos  asignados a los términos indexados son usados para computar el grado de similitud entre cada documento con la consulta que realiza usuario. Luego se ordenan los documentos recuperados de acuerdo a su relevancia, representada por la distancia entre los vectores de los documentos con el vector de la consulta.\\
+\subsection{Ponderación de términos} 
+
+Se asocia un peso a cada término que aparece en el documento $d_{j}$. Si un término no aparece tendrá peso igual a 0. Este peso cuantifica la importancia del término indexado en la descripción del contenido en el documento $d_{j}$.\\
+
+Hay diferentes formas de asignar los pesos teniendo en cuenta que no todos los términos son igualmente descriptivos para un documento.\\
+
+Algunas propiedades de los términos indexados resultan útiles para evaluar su importancia sobre el documento. Para modelos clásicos de IR se suponen que los pesos de los términos son independientes entre sí. En resumen, la cantidad de veces que ocurre un término no está relacionado con la cantidad de veces que pueda aparecer otro.\\
+
+Tomaremos como ejemplo de factor de ponderación de términos: TF-IDF (Frecuencia de término - Frecuencia inversa de documento) es el producto de dos estadísticas que busca reflejar la importancia del término sobre un documento de la colección. Un término es mas importante que otro en un documento si este es más representativo de la información que contiene el documento que aquel. De esta forma, un término es proporcional a la frecuencia con la que ocurre pero ante términos con la misma frecuencia tendrá mayor ponderación el que aparezca en la menor cantidad de documentos, buscando capturar así la idea de especificidad del término. \\
+
+%				\begin{figure}[h]
+%					\includegraphics[width=8cm]{tf-idf}
+%					\centering
+%					\caption{Función de asignación de pesos}
+%				\end{figure}
+
+\subsection{Función de ranking}
+
+Tomando el esquema de asignación de ponderación TF-IDF, el peso de cada término influirá en el ranking de documentos de acuerdo a su especificidad. \\ 
+
+Dada una consulta y un documento con una única coincidencia pero en un término de mayor peso, éste podría darle más valor de ranking que otro documento con varias coincidencias en términos de menores peso. \\
+
+Entonces podemos calcular la similitud entre dos documentos o entre un documento y una consulta como el coseno del ángulo formado por los vectores representativos de cada documento dj y consulta q. 
+
+				\begin{figure}[h]
+					\includegraphics[width=8cm]{vector-distance}
+					\centering
+					\caption{Calcular la similitud}
+				\end{figure}
+
+
 \section{Modelo probabilístico}
 
+Este modelo intenta resolver el problema de la recuperación de información estimando la probabilidad de que un documento sea relevante ante una determinada consulta.\\
+Se representa a los documentos como vectores de incidencia de términos. Inicialmente se asignan pesos binarios a los términos de acuerdo a si está presente o no en el documento.\\
+Se supone que existe para cada consulta un conjunto de respuesta ideal $R$ que satisface la consulta, no se lo conoce de antemano pero se va refinando consulta tras consulta.\\
+La consulta inicial del usuario permite al sistema responder con un primer conjunto de respuesta. Luego el usuario inspeccionará algunos documentos y el sistema utilizará esa información para mejorar la descripción del conjunto de respuesta. Iterando este procedimiento se espera obtener una caracterización lo mas parecida a la que descripción del conjunto de respuesta ideal.\\
+Para este modelo se asume la hipótesis del principio de probabilidad donde dada una consulta $q$ y un documento $d_{j}$, el modelo probabilístico estimará la probabilidad que el usuario encuentre relevante al documento $d_{j}$ asumiendo que la probabildad de relevancia sólo depende de la consulta y la representación del documento en el modelo.\\
+
+\subsection{Funcion de ranking}
+
+Como ya dijimos, la ponderación de los términos indexados es binaria, es decir, $w_{i,j} /in {0,1}$.
+Sea $R$ el conjunto de respuesta conocido como relevante para la consulta del usuario. Definimos $\overline{R}$ como el complemento de $R$ y sea $P(R|d_{j})$ la probabilidad que el documento $d_{j}$ resulte relevante a la consulta $q$ y $P(\overline{R}|d_{j})$ la probabildad de que $d_{j}$ no sea relevante a la consulta $q$.\\
+La similaridad entre el documento $d_{j}$ y la consulta $q$ queda definida por la función:
+			\begin{figure}[h]
+					\includegraphics[width=8cm]{prob-sim}
+					\centering
+					\caption{Calcular la similitud}
+				\end{figure}
+				
+Usando la regla de Bayes y sabiendo que $P(R)$ y $P(\overline{R})$ valen lo mismo para todos los documentos de la colección:
+			\begin{figure}[h]
+					\includegraphics[width=8cm]{prob-sim2}
+					\centering
+					\caption{Calcular la similitud}
+				\end{figure}
+				
+
+
 \section{Comparación entre modelos}
+
+Partiendo del modelo booleano que es el más simple pero también pobre porque no tiene la habilidad de realizar coincidencias parciales lo que define una baja performance del sistema respecto de los otro dos modelos.
+En cuanto a los últimos dos modelos, como se menciona en \cite{baeza1999}, Croft sugiere que el modelo de probabilidades aporta un mejor rendimiento de recuperación. Sin embargo, se demostró que el rendimiento del modelo vectorial supera a los demás para colecciones de documentos más generales.
+En cuanto a la desventaja que se observa en estos modelos es que se asume independecia entre los términos.

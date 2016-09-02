@@ -3,6 +3,32 @@
 % - Retrieval performance.
 % - Más...
 
-\section{Precisión}
+Teniendo en cuenta que ante la consulta de un usuario que presenta cierto grado de incertidumbre, la lista de documentos recuperados no será una respuesta exacta y determinística como ocurre en sistemas de bases de datos relacionales. Las medidas de evaluación propias de una sistema de recuperación de información nos permiten conocer la calidad de las respuestas del sistema ante determinadas consultas. Más allá de las medidas de rendimiento de cualquier sistema computacional, como el tiempo de respuesta o el espacio necesario para responder una consulta, que también se podrán tener en cuenta. \par
 
-\section{Recall}
+En este capítulo haremos foco sobre medidas específicas en la recuperación de información. Es importante mencionar que cuando se quiere medir la performance de un sistema hay que tener en claro la tarea de recuperación que realiza, la cual podrá consistir de consultas procesadas por lote (batch mode) o sino mediante una sesión interactiva donde el usuario deberá ir especificando la información que necesita a través de una serie de pasos interactivos. Esta aclaración es simplemente para ilustrar que existen diferentes formas de procesamiento con lo cual la manera de evaluar su rendimiento también será diferente. \par
+
+Muchas medidas de rendimiento y correctitud han sido propuesta, sólo veremos las tres que consideramos mas interesantes pero sepan que hay muchas más que se pueden aplicar quizás dependiendo el contexto en donde se utilice el sistema, para mas información puede consultar \cite{baeza1999} \par
+
+Consideremos una consulta q sobre una colección de documentos D y una estrategia de recuperación S a evaluar. Suponemos conocido el conjunto R de documentos determinados como revelantes para el usuario con la necesidad de información que representa la consulta q, en este caso los documentos se clasifican como relevantes o no, en otro escenario es posible que la relevancia sea multivaluada. \\
+
+Sea A el conjunto ordenado de respuesta que genera el sistema aplicando la estrategía S sobre la consulta q.
+
+\section{Precisión}
+Esta medida define la fracción de los documentos recuperados que son relevantes para el usuario cuando realiza la consulta q. Podemos considerar que cada documentos relevante recuperado es un acierto (hit) del sistema. \\
+
+---agregar grafico
+
+\section{Recall o Exhaustividad}
+Esta medida define la fracción de los documentos relevantes que fueron recuperados para la consulta q. Cada documento relevante no recuperado representa un desacierto (miss) del sistema. \\
+
+---agregar grafico
+
+Con esta dos medidas podemos definir una curva donde nos muestre el valor de precisión alcanzado por el sistema utilizando S para ciertos valores de exhaustividad. \\
+
+---grafico de curva \\
+
+\section{Fall-out o Proporción de fallos}
+La proporción de fallos define la fracción de los documentos no relevantes que fueron recuperados para una consulta.\\
+Resulta deseable minimizar esta variable o maximizar la exhaustividad y al mismo tiempo lograr mayor precisión en las respuestas. \\
+
+---Hablar sobre las medidas online y la diferencia con las medidas offline
