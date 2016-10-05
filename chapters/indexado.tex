@@ -6,8 +6,17 @@
 
 \section{Introducción}
 
-El propósito de crear y mantener un índice es optimizar y mejorar la recuperación de documentos relevantes a partir de una consulta de búsqueda. Con lo cual un sistema de recuperación sin un índice necesitaría revisar todos los documentos de la colección ante cada consulta lo que demandaría demasiado tiempo y poder computacional. El espacio necesario para almacenar el índice como el tiempo necesario para actualizarlo es compensado por este ahorro de tiempo ante cada recuperación de información del sistema. \par
+El propósito de crear y mantener un índice es optimizar y mejorar la recuperación de documentos relevantes a partir de una consulta de búsqueda. Con lo cual un sistema de recuperación sin un índice necesitaría revisar todos los documentos de la colección en cada consulta lo que demandaría demasiado tiempo y poder computacional. El espacio necesario para almacenar el índice como el tiempo necesario para actualizarlo es compensado por este ahorro de tiempo ante cada recuperación de información del sistema. \par
 
-Se denomina indexación al procedimiento de construir un índice invertido de los términos sobre la colección de documentos. Esta estructura relaciona cada término con la lista de postings que contiene la referencia de los documentos en donde ocurre al menos una vez ese término. La lista de posting es ordenada por el identificador del documento. \\
-Es llamado también índice booleano ya que solo puede determinar si un término aparece en un documento o no, sin dar a conocer detalles como, por ejemplo la posición en el documento o la cantidad de ocurrencias. \par
-Completar...
+Se denomina indexación al procedimiento de construir un índice invertido de los términos del contenido sobre la colección de documentos. Esta estructura relaciona cada término con la lista de postings que contiene la referencia de los documentos en donde ocurre al menos una vez ese término. \\
+Es llamado también índice booleano ya que solo puede determinar si un término aparece en un documento o no, sin dar a conocer detalles como, por ejemplo, la posición en el documento o la cantidad de ocurrencias. Los índices están relacionado con la forma que tiene la representación de los documentos aún así consideramos que las contrucciones habituales de índices utilizan palabras.\par
+
+
+\section{Construcción del índice}
+
+Para obtener los términos (keywords) de cada documento es necesario realizar el procedimiento detallado en el capítulo 3 y así obtener un conjunto más reducido de palabras a indexar. \\
+Un índice invertido consiste de un conjunto de palabras o términos (vocabulario) que normalmente se mantiene en memoria principal y una lista de ocurrencia de los términos en la colección de documentos (posting list).\\
+La estructura que representa el vocabulario puede ser una lista, árbol de búsqueda o tabla hash. Cada una de éstas tiene un costo de búsqueda, inserción y borrado asociado lo cual dependerá de lo que se considere más importante a la hora de elegir la estructura de datos a utilizar.\\
+
+\section{Comparación con otros índices}
+La estructura de índice invertido es considerada la más eficiente para realizar búsqueda de documentos basados en texto.
