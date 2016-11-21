@@ -1,29 +1,30 @@
 \section{Motivación}
 %% Explicar por qué elegimos Sistemas recomendadores (orientados a lo social) como Estado del Arte.
-(Explicar por qué elegimos Sistemas Recomendadores como Estado del Arte)
+El orden de crecimiento en la generación de contenidos que se acceden en la red se supera año tras año, con lo cual resulta necesario aplicar un filtro a esta montaña de información ya que de otra forma demandaría demasiado tiempo de analisis al interesado encontrar lo que realmente le sea importante, considerando que este criterio varía entre individuos dado que éstos poseen características y prefencias particulares. \\
+Los sistemas recomendadores tratan de solucionar este problema mediante el uso de técnicas de inteligencia artificial en el campo de la recuperación de información permitiendo seleccionar de forma automatizada el contenido que mejor se adapte a las preferencias de cada usuario, otorgando una experiencia personalizada en la búsqueda de información.
 
 \section{Sistemas recomendadores}
 	%% Desarrollo, principalmente, del libro de Ullman: Mining of Masive Datasets - Capítulo 9
 	
 	\subsection{Introducción}
-		Un sistema recomendador es aquel el cual intenta predecir la respuesta de usuarios hacia ciertas opciones, \cite{ullman2014}. Para entrar en detalles, veamos algunas aplicaciones en las cuales se implementan sistemas recomendadores:
+		Un sistema recomendador es aquel que intenta predecir la respuesta de usuarios hacia ciertas opciones, \cite{ullman2014}. Para entrar en detalles, veamos algunas aplicaciones en las cuales se implementan sistemas recomendadores:
 		\begin{itemize}
-			\item \textit{Recomendación de productos}. Se utilizan exclusivamente en tiendas on--line. Una de ellas es Amazon: a cada usuario que retorna al sitio, ésta brinda productos que tal vez el usuario busque comprar. Estas sugerencias no son aleatorias, están basadas en productos los cuales el usuario (o usuarios similares) ya ha comprado en el pasado.
-			\item \textit{Recomendación de películas}. Netflix es una de las empresas con sistemas recomendadores de películas más efectivos del planeta: ofrece a sus clientes películas que probablemente les gusten. Estas recomendaciones están basadas en calificaciones hechas por diversos usuarios.
+			\item \textit{Recomendación de productos}. Se utilizan exclusivamente en tiendas on--line. Una de ellas es Amazon: a cada usuario que retorna al sitio, ésta brinda productos que tal vez el usuario busque comprar. Estas sugerencias están basadas en productos los cuales el usuario (o usuarios similares) ya han comprado antes.
+			\item \textit{Recomendación de películas}. Netflix es una de las empresas con sistemas recomendadores de películas más efectivos del planeta: ofrece a sus clientes recomendaciones de películas que están basadas en calificaciones hechas por diversos usuarios.
 			\item \textit{Noticias}. Basados en artículos que un usuario ha leído en el pasado, los servicios de noticias utilizan sistemas recomendadores para identificar artículos los cuales puedan llegar a interesar al usuario. En éstos sistemas, la similitud entre artículos de noticias se \enquote{mide} mediante la importancia de las palabras en los documentos, o mediante artículos los cuales fueron leídos por usuarios similares. Cabe destacar que ésta misma técnica se utiliza en servicios de video (como YouTube), servicios de imágenes y servicios de blogs.
 		\end{itemize}
 	
 		Los sistemas recomendadores utilizan diversas tecnologías. Citando a \cite{ullman2014}, podemos clasificarlos en dos grupos:
 		\begin{itemize}
 			\item \textbf{Basados en contenidos}. Se enfocan en las propiedades de los ítems. Por ejemplo, si un usuario de Netflix ha mirado muchas películas sobre el personaje de ficción \textit{Batman}, luego el sistema recomendador de Netflix recomendará películas (dentro de su base de datos) sobre el personaje \textit{Batman}.
-			\item \textbf{Basados en filtrado colaborativo}. Recomiendan ítems en base a la similitud (semejanza) entre usuarios y/o ítems. Los ítems recomendados a un usuario son aquellos preferidos por usuarios similares.
+			\item \textbf{Basados en filtrado colaborativo}. Recomiendan ítems en base a la similitud entre usuarios y/o ítems. Los ítems recomendados a un usuario son aquellos preferidos por usuarios similares.
 		\end{itemize}
 	
 	\subsection{Un modelo para sistemas recomendadores}
-		A continuación se desarrollará un modelo para sistemas de recomendación el cual se basa en una matriz de utilidad. Tambíen se detallarán las claves diferencias entre un comercio físico y un comercio on--line, dando lugar a un fenómeno denominado \textit{long--tail}.
+		A continuación se desarrollará un modelo para sistemas de recomendación el cual se basa en una matriz de utilidad. También se detallarán las diferencias claves entre un comercio físico y un comercio on--line, dando lugar a un fenómeno denominado \textit{long--tail}.
 		
 		\subsubsection{Almacenando preferencias de usuarios}
-			En un sistema de recomendación tradicional se describen dos tipos de entidades: \textit{usuarios} e \textit{ítems}. Como es de esperar, los usuarios tienen ciertas preferencias (calificaciones) a ciertos ítems. Esta información se representa en una matriz llamada \textit{matriz de utilidad} (\textit{utility matrix}, en inglés). En ésta, a cada par usuario--ítem se le otorga un valor que representa el grado de preferencia de ése usuario a ése ítem. Estos valores, por lo general, pertenecen al conjunto [1,5]. La matriz de utilidad es una matriz en donde la mayoría de sus elementos son \enquote{desconocidos}; es decir, no se tiene información acerca de la preferencia del usuario sobre ése ítem. Esto es razonable, ya que es prácticamente imposible que un usuario otorge una calificación a cada ítem existente. \par
+			En un sistema de recomendación tradicional se describen dos tipos de entidades: \textit{usuarios} e \textit{ítems}. Como es de esperar, los usuarios tienen ciertas preferencias (calificaciones) a ciertos ítems. Esta información se representa en una matriz llamada \textit{matriz de utilidad} (\textit{utility matrix}, en inglés). En ésta, a cada par usuario--ítem se le otorga un valor que representa el grado de preferencia de ése usuario a hacia ése ítem. Estos valores, por lo general, pertenecen al conjunto [1,5]. En la matriz de utilidad la mayoría de sus elementos son \enquote{desconocidos}; es decir, no se tiene información acerca de la preferencia del usuario hacia la mayoría de los ítems. Esto es razonable, ya que es prácticamente imposible que un usuario otorge una calificación a cada ítem existente. \par
 			El objetivo de todo sistema recomendador es, mediante distintos métodos, \enquote{predecir} los espacios en blanco en la matriz de utilidad. \par
 			
 			\begin{quote}
@@ -47,7 +48,7 @@
 			
 			En general, una librería acomodará en una estantería sólo aquellos libros populares; es decir, los más exitosos. Un editorial de diarios imprimirá sólo aquellos artículos los cuales crea que la mayoría de las personas estarán interesadas. Dependiendo el caso, las ventas la determinan ciertos organismos, ciertas opciones, etc. \par
 			
-			La diferencia entre comercios físicos y comercios electrónicos se denomina fenómeno \textit{long--tail} y se representa en la Figura XX. En ésta, se describen la \textit{popularidad} (el número de veces un ítem se ha elegido) en el eje vertical y los ítems -- ordenados dependiendo su popularidad -- en el eje horizontal. Los comercios físicos, como detallamos anteriormente, sólo pueden mostrar una fracción de lo que venden; por lo tanto, muestran al público sus productos más populares. Estos se encuentran en la izquierda del gráfico. Mientras que, como gran ventaja, las instituciones on--line tienen la capacidad de desplegar todos sus productos ante sus visitantes: la cola (\textit{tail}) del gráfico como también los ítems más populares. \par
+			La diferencia entre comercios físicos y comercios electrónicos se denomina fenómeno \textit{long--tail} y se representa en la Figura XX. En ésta, se describen la \textit{popularidad} (el número de veces que un ítem se ha elegido) en el eje vertical y los ítems -- ordenados dependiendo su popularidad -- en el eje horizontal. Los comercios físicos, como detallamos anteriormente, sólo pueden mostrar una fracción de lo que venden; por lo tanto, muestran al público sus productos más populares. Estos se encuentran en la izquierda del gráfico. Mientras que, como gran ventaja, las tiendas on--line tienen la capacidad de desplegar todos sus productos ante sus visitantes: la cola (\textit{tail}) del gráfico como también los ítems más populares. \par
 			
 			Este fenómeno es lo que fuerza a las instituciones comerciales on--line a desarrollar sistemas de recomendación de ítems ya que, de otra forma, sería imposible mostrar a un usuario todos los productos que el comercio tiene a la venta.
 			
@@ -59,7 +60,7 @@
 			\end{figure}
 			
 		\subsubsection{Creando la matriz de utilidad}
-			Como se desarrolló anteriormente, todo sistema de recomendación debe ser capaz de almacenar las preferencias de ciertos usuarios acerca de ciertos ítems. Para ésto, la estructura tradicional utilizada es la llamada matriz de utilidad. Ahora, ¿cómo se logra \enquote{llenar} ésta matriz?. Obtener información con la cual construir la matriz de utilidad es usualmente difícil. Sin embargo, existen ciertos enfoques para descubrir los valores con los cuales los usuarios califican los ítems:
+			Como se explicó anteriormente, todo sistema de recomendación debe ser capaz de almacenar las preferencias de ciertos usuarios acerca de ciertos ítems. Para ésto, la estructura tradicional utilizada es la llamada matriz de utilidad. Ahora, ¿cómo se logra \enquote{llenar} ésta matriz?. Obtener información con la cual construir la matriz de utilidad es usualmente difícil. Sin embargo, existen ciertos enfoques para descubrir los valores con los cuales los usuarios califican los ítems:
 			\begin{itemize}
 				\item Pedir a los usuarios que califiquen ítems. Este enfoque es limitado ya que, por lo general, los usuarios no tienden a responder.
 				\item Obtener conclusiones mediante el comportamiento del usuario. Si el usuario compra un ítem en Amazon, mira una película en YouTube, o lee una noticia, podemos decir que al usuario le \enquote{gusta} éste ítem. Este sistema de \textit{rating} tiene sólo un valor asociado: 1 significa que al usuario le \enquote{gusta} el ítem. Muchas veces, tambíen, nos encontramos con matrices de utilidad las cuales contienen valores 0's en vez de espacios en blanco. Esto quiere decir que el usuario no ha visto o comprado el producto. En éstos casos, un valor 0 no es menor que un valor 1; no es una calificación de \textit{rating}.
@@ -68,12 +69,12 @@
 	\subsection{Sistemas recomendadores basados en contenido}
 		% Lucho
 		
-		En ésta sección se desarrollará una de las dos indentificables arquitecturas de sistemas de recomendación: aquellas basadas en contenidos. Como vimos anteriormente, los sistemas recomendadores basados en contenidos se enfocan principalmente en las propiedades de los ítems para, luego, computar similitudes entre pares de éstos.
+		En ésta sección se desarrollará una de las dos arquitecturas más indentificables de sistemas de recomendación: aquellas basadas en contenidos. Como vimos antes, los sistemas recomendadores basados en contenidos se enfocan principalmente en las propiedades de los ítems para luego computar similitudes entre éstos.
 		
 		\subsubsection{Pefil de los ítems}
-			Los sistemas basados en contendio deben crear un \textit{perfil} para cada ítem. Razonablemente, un perfil de un ítem es un \textit{conjunto} de características (propiedades) importantes las cuales representan al ítem. Como ejemplo introductorio, consideremos las características más importantes acerca de una película que, además, deben ser relevantes en un sistema recomendador:
+			Los sistemas basados en contendio deben crear un \textit{perfil} para cada ítem. Razonablemente, un perfil de un ítem es un \textit{conjunto} de características (propiedades) importantes las cuales lo representan de cierta forma. Como ejemplo introductorio, consideremos las características más importantes acerca de una película que serán relevantes en un sistema recomendador:
 			\begin{itemize}
-				\item El conjunto de actores. Algunas personas prefieren aquellas peliculas las cuales trabajen sus actores favoritos.
+				\item El conjunto de actores. Algunas personas prefieren aquellas películas las cuales trabajen sus actores favoritos.
 				\item El director. Algunas personas, al elegir una película, consideran quién la ha dirigido.
 				\item El año en el cual la película se estrenó. Algunas personas son amantes de películas viejas, mientras que otros las prefieren actuales.
 				\item El género. Existen personas que prefieren comedias ante que dramas.
@@ -83,7 +84,7 @@
 		\subsubsection{Extrayendo características de documentos e imágenes}
 			Como sabemos, existen diversas \enquote{clases} de ítems. En éste capítulo consideraremos dos de ellas: colecciones de documentos e imágenes. De cada una de éstas clases de ítems debemos ser capaces de extraer características de los mismos para, luego, construir su correspondiente perfil. \par
 			
-			Existen muchos tipos de documentos para los cuales los sitemas de recomendación pueden ser útiles. Como sabemos, todos los días se publican miles de artículos los cuales, obviamente, no podemos leer. Un sistema recomendador puede sugerir aquellos artículos los cuales un usuario podría estar interesado. Pero, ¿cómo, éstos sistemas, pueden distringuir entre artículos?. Desafortunadamente, los artículos no tienen herramientas accesibles para saber (mediante, por ejemplo, una llamada a función) sus características y propiedades; como bien detallamos en el ejemplo anterior acerca de las características de una película. Por lo tanto, una forma de obtener información acerca de éstos documentos es mediante las técnicas de recuperación de información que estudiamos a lo largo de la monografía. En resumen:
+			Existen muchos tipos de documentos para los cuales los sistemas de recomendación pueden ser útiles. Todos los días se publican miles de artículos los cuales, obviamente, no podemos leer. Un sistema recomendador puede sugerir aquellos artículos los cuales un usuario podría estar interesado. Pero, ¿cómo, éstos sistemas, pueden distringuir entre artículos?. Desafortunadamente, los artículos no tienen herramientas accesibles para saber (mediante, por ejemplo, una llamada a función) sus características y propiedades; como bien detallamos en el ejemplo anterior acerca de las características de una película. Por lo tanto, una forma de obtener información acerca de éstos documentos es mediante las técnicas de recuperación de información que estudiamos a lo largo de este trabajo. En resumen:
 			\begin{enumerate}
 				\item Procesamiento de texto:
 					\begin{enumerate}
@@ -94,14 +95,16 @@
 					\end{enumerate}			
 				 \item Obtener los términos más frecuentes de cada documento. Estos tienden a expresar, de alguna manera, acerca de qué trata el documento.					
 			\end{enumerate}
-			Luego, podemos considerar como \textit{características} de un documento los $n$ términos más frecuentes computados en el paso 2 de la lista anterior. Es posible tomar $n$ de cada documento; es decir, $n$ fijo. También podemos tomar, del conjunto de todos los términos más frecuentes de un documento, sólo aquellos que superen cierta cota. Intuitivamente, decimos que éstos términos son los que expresan las principales ideas del documento. En un artículo de noticias podemos esperar que los términos con mayor frecuencia incluyan los nombres de las personas \enquote{involucradas} en el artículo, ubicación del evento, y demás. Uno de los métodos para medir la similitud entre documentos es la distancia del coseno (vista en el Capítulo 5): representamos cada documento como un vector $\vec{v}$ donde $\vec{v}[t] = 1$ si sólo si el término t es un término de alta frecuencia (es decir, pertenece al conjunto de los términos más frecuentes del documento en cuestión) dentro del documento, y $\vec{v}[t] = 0$ en otro caso. Como es de esperar, los vectores que representen los dos documentos de entrada para computar la similitud del coseno, tendrán mas componentes 0's que 1's; pero no impacta en el valor del producto escalar. \par
+			\par
+			Luego del procesamiento podemos considerar como \textit{características} de un documento los $n$ términos más frecuentes computados en el paso 2 de la lista anterior. Es posible tomar $n$ de cada documento; es decir, $n$ fijo. También podemos tomar, del conjunto de todos los términos más frecuentes de un documento, sólo aquellos que superen cierta cota. Intuitivamente, decimos que éstos términos son los que expresan las principales ideas del documento. \par
+			En un artículo de noticias podemos esperar que los términos con mayor frecuencia incluyan los nombres de las personas \enquote{involucradas} en el artículo, ubicación del evento, y demás. Uno de los métodos para medir la similitud entre documentos es la distancia del coseno (visto en el Capítulo 5): representamos cada documento como un vector $\vec{v}$ donde $\vec{v}[t] = 1$ si sólo si el término t es un término de alta frecuencia (es decir, pertenece al conjunto de los términos más frecuentes del documento en cuestión) dentro del documento, y $\vec{v}[t] = 0$ en otro caso. Como es de esperar, los vectores que representen los dos documentos de entrada para computar la similitud del coseno, tendrán mas componentes 0's que 1's; pero no impacta en el valor del producto escalar. \par
 			
-			Como bien se detalló, documentos de texto e imágenes son dos de los tipos de ítems mas compunes. Ahora, ¿cómo obtenemos características y propiedades acerca de una imagen?. Las imágenes son típicamente un array de píxeles, que no nos indican nada útil acerca de qué trata la imagen. Sí es posible calcular ciertas propiedades acerca de los píxeles, como por ejemplo el promedio total de la \enquote{cantidad} de negro en la imagen; pero pocos usuarios buscan específicamente imágenes de un determinado color. Una forma de solucionar éstos problemas es invitando a usuarios a etiquetar (\textit{tag}, en ingĺés) imágenes ingresando palabras o frases que la describan. Esta técnica se utiliza también en todos aquellos ítems los cuales no se tiene una idea clara sobre cómo, mediante sus estructuras de datos correspondientes, obtener características de los mismos. Por lo tanto, una imagen la cual pondera el color rojo podría ser etiquetada como \enquote{anochecer en Rosario}. Las etiquetas son explotadas en sistemas de recomendación. Sólo ocurre el problema que, muchas veces, los usuarios no se toman el trabajo de realizar el etiquetado de ítems.
+			Como bien se detalló, documentos de texto e imágenes son dos de los tipos de ítems mas compunes. Ahora, ¿cómo obtenemos características y propiedades acerca de una imagen?. Las imágenes son típicamente un array de píxeles, que no nos indican nada útil acerca de qué trata la imagen. Sí es posible calcular ciertas propiedades acerca de los píxeles, como por ejemplo el promedio total de la \enquote{cantidad} de negro en la imagen; pero pocos usuarios buscan específicamente imágenes de un determinado color. Una forma de solucionar éstos problemas es invitando a usuarios a etiquetar (\textit{tag}, en inglés) imágenes ingresando palabras o frases que la describan. Esta técnica se utiliza también en todos aquellos ítems en los cuales no se tiene una idea clara sobre cómo, mediante sus estructuras de datos, obtener características relevantes. Por lo tanto, una imagen la cual pondera el color rojo podría ser etiquetada como \enquote{anochecer en Rosario}. Las etiquetas son explotadas en sistemas de recomendación. Sólo ocurre el problema que, muchas veces, los usuarios no se toman el trabajo de realizar el etiquetado de ítems.
 			
 			\subsubsection{Representación de perfiles de ítems}
 				Todo sistema de recomendación basado en contenido debe ser capaz de poder representar, de alguna forma, sus dos principales entidades: ítems y usuarios. La representación de ítems debe contener los pares característica--valor, mientras que la representación de la entidad usuario debe resumir las preferencias del mismo (basadas en la matriz de utilidad). \par
 				
-				En la sección anterior se propuso una forma de representar ítems: un vector de sólo 0's y 1's, donde un 1 representa un término de alta frecuencia en el documento. Esta representación es trivial debido a que nos enfocamos en documentos de texto; es decir, todos los componentes del vector anteriormente mencionado representa un término dentro del documento. Todo sistema recomendador debe ser capaz de representar cualquier clase de ítem. Es realmente fácil cuando se tienen que representar características que son conjunto de valores discretos. Para ejemplificar lo anterior, tomemos el ejemplo de las películas. Una de las características de una película es el conjunto de actores los cuales trabajaron en ella. Este conjunto, obviamente, es un conjunto discreto. Imaginemos que hay un componente por cada actor, donde el valor 1 representa que el actor trabajó en la película en cuestión, y 0 representa el caso contrario. \\
+				En la sección anterior se propuso una forma de representar ítems: un vector con valores binarios, donde un 1 representa un término de alta frecuencia en el documento. Esta representación es trivial debido a que nos enfocamos en documentos de texto; es decir, todos los componentes del vector anteriormente mencionado representan un término dentro del documento. Todo sistema recomendador debe ser capaz de representar cualquier clase de ítem. Es realmente fácil cuando se tienen que representar características que son conjunto de valores discretos. Para ejemplificar lo anterior, tomemos el ejemplo de las películas. Una de las características de una película es el conjunto de actores los cuales trabajaron en ella. Este conjunto, obviamente, es un conjunto discreto. Imaginemos que hay un componente por cada actor, donde el valor 1 representa que el actor trabajó en la película en cuestión, y 0 representa el caso contrario. \\
 				Ahora, ¿qué sucede con aquellas características que no pueden ser representadas por vectores booleanos?. Estas características se denominan \textit{numéricas}. Por ejemplo, la calificación de una película; la cual es un número real. No tiene sentido tener un componente para cada uno de las posibles calificaciones. Estas características deben ser representadas por componentes indiviudales. Cabe destacar que no existe ningún daño si alguno de los componentes de un vector toman valores booleanos (1's ó 0's) y otros toman valores reales o enteros: es posible computar la distancia del coseno entre vectores.
 				\begin{quote}
 					\textbf{Ejemplo 8.2}. A modo de ejemplo, sean dos películas $A$ y $B$ en las cuales sólo se representan el conjunto de actores y la calificación promedio. Supongamos que cada película tiene cinco actores cada una.
@@ -121,7 +124,7 @@
 					\end{equation}
 				\end{quote}
 				
-				Si tomamos $\alpha = 1$ (es decir, sin alterar las calificaciones), la similitud entre los dos vectores es 0,816. Mientras que si tomamos $\alpha = 2$, el coseno es 0,940; es decir, los vectores parecen más cercanos en dirección. Ahora, si usamos $\alpha = 1/2$, luego, el coseno es 0,619, logrando que la similitud entre los vectores sea bastante diferente. No es posible saber qué valor de $\alpha$ es el \enquote{correcto}, pero desde ya podemos visualizar cómo afecta escalar su valor y, por lo tanto, cómo afecta nuestra decisión sobre cuán similares son los ítems.
+				Si tomamos $\alpha = 1$ (es decir, sin alterar las calificaciones), la similitud entre los dos vectores es 0,816. Mientras que si tomamos $\alpha = 2$, el coseno es 0,940; es decir, los vectores parecen más cercanos en dirección. Ahora, si usamos $\alpha = 1/2$, luego, el coseno es 0,619, logrando que la similitud entre los vectores sea bastante diferente. No es posible saber qué valor de $\alpha$ es el \enquote{correcto}, pero si podemos observar cuán similares son los ítems de acuerdo a la elección del valor de $\alpha$.
 				
 			\subsubsection{Representación de perfiles de usuario}
 				Ahora, necesitamos definir una estructura para representar el perfil de un usuario. Debemos crear vectores con los mismos componentes que utilizamos en la sección anterior para representar el perfil de un ítem. \par
@@ -134,19 +137,88 @@
 			\subsubsection{Limitaciones}
 				Los sistemas recomendadores basados en contenidos presentan varias limitaciones. Entre las más importantes se encuentran:
 				\begin{itemize}
-					\item Análisis de contenido limitado. Estos sistemas son difíciles de implementar cuando los ítems son archivos multimedia (imágenes, videos). Una forma de sortear ésta limitación es mediante el uso de etiquetas, como estudiamos anteriormente.
-					\item Sobre--especialización: los ítems recomendados a un usuario son limitados a aquellos que son similares a los cuales el usuario ya calificó.
-					\item Problema del nuevo usuario (\textit{cold start problem}). Para que un sistema de recomendación basado en contenido entienda las preferencias de un usuario, el usuario debe calificar un número suficiente de ítems. Por lo tanto, éstos sistemas fallan al recomendar ítems para usuarios los cuales han calificado pocos ítems.
+					\item \textbf{Análisis de contenido limitado}. Estos sistemas son difíciles de implementar cuando los ítems son archivos multimedia (imágenes, videos). Una forma de sortear ésta limitación es mediante el uso de etiquetas, como mencionamos anteriormente.
+					\item \textbf{Sobre--especialización}: Los ítems recomendados a un usuario están limitados a aquellos que son similares a los cuales el usuario ya calificó.
+					\item \textbf{Problema del nuevo usuario} (\textit{cold start problem}). Para que un sistema de recomendación basado en contenido conozca las preferencias de un usuario, el usuario debe calificar un número de ítems suficientes. Por lo tanto, éstos sistemas fallan al recomendar ítems para usuarios los cuales han calificado pocos ítems.
 				\end{itemize}
 			
 	\subsection{Sistemas recomendadores basados en filtrado colaborativo}
 	% Estani
 	
+	Este modelo presenta otro enfoque que, a diferencia del anterior, en lugar de utilizar las propiedades de los ítems para determinar la similitud con el usuario se centra en buscar la similaridad entre ítems mediante sus calificaciones. De esta forma, en lugar de utilizar el vector con las características de un ítem se toma la columna en la matriz de utilidad que representa las calificaciones de todos los usuarios para ese ítem. Además los usuarios son representados por sus filas correspondientes en la matriz utilidad. Así dos usuarios podrán resultar similares de acuerdo a la distancia que se encuentren sus vectores filas de la matriz tomando, por ejemplo, la similitud de Jaccard o la similitud del coseno. \par
+	Las recomendaciones a un usuario se realizarán buscando cuales son los usuarios similares a éste en términos de distancia y el sistema recomendará ítems que dichos usuarios hayan calificado. Este proceso se denomina filtrado colaborativo.
+	
+	\subsubsection{Midiendo similitud}
+	La primera inquietud que surge en este modelo parece ser como medir la similitud entre usuarios y entre ítems. Tomaremos como ejemplo la matriz del ejemplo 8.1 para explicar dos posibles medidas a utilizar por el sistema para calcular similitud. \\
+	
+	\textbf{Distancia de Jaccard:} \par
+	Esta medida ignora los espacios de la matriz que no presenta información del usuario y cuantifica sólo el conjunto de ítems calificados. Si la matriz de utilidad representa ventas es probable que ésta medida sea una buena elección para el sistema. En cambio, cuando las matrices representan valoraciones más detalladas, el coeficiente de Jaccard descarta cierta información. \par
+
+	Por ejemplo, tomando los usuarios A y B que tienen una intersección de 1 porque han valorado un ítem en común y una unión de 5 que representa la cantidad de ítems diferentes valorados entre los dos. Nos da que la similitud de Jaccard de A y B es 1/5 y su distancia de Jaccard es 4/5. En contraste podemos decir que A y C tiene similitud de Jaccard de 2/4 y su distancia de Jaccard coincide con la similitud que es 1/2. Esto nos indica que A está más cerca de C que de B de acuerdo con esta medida aunque intuitivamente parece ser un error ya que A y C no acuerdan en las valoraciones de películas que ambos miraron mientras que A y B parece ser que les agradó la única película en común que vieron. \\
+
+	\textbf{Distancia del Coseno:} \par
+	Considerando que las entradas en blanco de la matriz se tomen como un 0 en la calificación de este ítem podemos definir el coseno entre el ángulo que forman los vectores filas de la matriz que representan a los usuarios A y B como sigue:
+	
+	\begin{equation}
+	\frac{ 4 \times 5}{\sqrt{4^2 + 5^2 + 1^2} \sqrt{5^2 + 5^2 + 4^2}} = 0.380
+	\end{equation}	\\
+				
+Mientras que el coseno del ángulo que forman los vectores representativos de A y C es:
+ 	
+ 	\begin{equation}
+	\frac{ 5 \times 2 + 1 \times 4}{\sqrt{4^2 + 5^2 + 1^2} \sqrt{2^2 + 4^2 + 5^2}} = 0.322
+	\end{equation}	\\
+	
+	
+Mientras más grande (valor positivo) sea el coseno implica que el ángulo entre los vectores será más chico y por lo tanto una menor distancia entre ellos. Esta medida nos muestra que A está mínimamente más cerca de B que de C. \\
+
+\subsubsection{Normalizando las calificaciones}
+
+Si se normalizan los valores en la matriz, de forma que al valor de cada ítem que un usuario le otorgó se le reste el promedio de calificaciones para todos los ítems que ese usuario calificó, otorgando así más importancia a los usuarios que más calificaciones determinantes hayan aportado. Luego aplicando la distancia del coseno sobre los vectores resultantes podremos observar que usuarios que presentan desacuerdo en las calificaciones sobre películas que han visto en común, que estarán representados por vectores con direcciones casi opuestas y serán considerado comos los más alejados. Por el contrario, usuarios con opiniones similares sobre películas que han calificado en común serán representados por vectores que formarán un ángulo pequeño entre ellos. \par
+
+En el ejemplo, si realizamos la normalización y luego calculamos la distancia del coseno obtendremos que la distancia entre A y B es 0.092 mientras que la distancia entre A y C es -0.559. Con lo cual esta medida de distancia se acerca a lo que observamos intuitivamente, ya que A y C presentan desacuerdo en dos películas mientras que A y B tienen valoraciones parecidas en la única película que han visto en común.
+
+\subsubsection{Dualidad}
+
+La matriz de utilidad puede darnos información sobre usuarios, ítems o sobre ambos. La importancia de poder realizar cualquier análisis sirve tanto para encontrar usuarios o ítems parecidos, aunque en la práctica esta simetría no se cumple en todos los casos ya que hay diferencias cuando se busca comparar similitud entre ítems o entre usuarios. Los ítems tienden a ser fácilmente clasificables, por ejemplo, las canciones suelen pertenecer a un género distintivo, es decir, no hay canciones que pertenezcan a rock y salsa al mismo tiempo.\\
+En cambio, resulta más difícil definir si dos usuarios son similares cuando sólo prefieren un género musical en común, es probable que existan géneros que uno prefiera que el otro no y viceversa.\par
+
+Una manera de predecir el valor en la matriz de utilidad para el usuario \textit{U} y el ítem \textit{I} es encontrar los \textit{n} usuarios más similares a \textit{U} y promediar sus calificaciones para el ítem \textit{I}.  \\
+De manera análoga se pueda usar la similaridad en ítems para estimar la entrada para el usuario \textit{U} y el ítem \textit{I} encontrando los \textit{m} ítems más parecidos a \textit{I} y tomando el promedio de calificaciones. Como en la caso anterior se consideran las calificaciones de m ítems que hayan sido otorgados por \textit{U}. Probablemente sea buen idea normalizar las calificaciones antes de computar el promedio. Para recomendar ítems al usuario \textit{U} vemos que será necesario estimar cada entrada en la fila de ese usuario. \par
+
+La pregunta es si conviene trabajar computando similitud entre usuarios o entre ítems. \\
+Para encontrar usuarios parecidos, debemos efectuar el proceso una vez para cada usuario \textit{U}. Así del conjunto de usuarios similares a \textit{U} podemos completar todos los blancos en la fila de \textit{U}. 
+Si trabajamos con ítems parecidos, tendremos que computar la similaridad para todos los items, antes de poder completar la fila de \textit{U}. \\
+Por otro lado, como observamos antes la similitud entre ítems nos proporciona información más confiable porque es más sencillo encontrar ítems del mismo género. En cambio el cálculo de similitud entre usuarios con poca información tiende a ser más impreciso. 
+
+\subsubsection{Clusters de ítems y usuarios}
+
+Vemos que resulta difícil detectar similitudes entre ítems o usuarios dado que hay poca información inicialmente en la matriz de utilidad. Considerando usar la similitud entre artículos, incluso si dos de ellos pertenecen a la misma categoría es probable que haya pocos usuarios que compraron o calificaron ambos. De la misma forma para usuarios que comparten gusto por una categoría, ellos podrían no haber comprado ningún ítem en común. \par
+
+Una forma de manejar este inconveniente es agrupando ítems y/o usuarios. Tomando alguna medida de distancia de las que ya vimos podemos optar por agrupar los ítems. Es posible que no encontremos una razón al principio para lograr un número chico de grupos, por lo cual es posible primero optar por un enfoque jerárquico. \\
+En nuestro ejemplo podemos reducir a la mitad la cantidad de ítems formando los siguientes grupos o clusters, donde las películas de Harry Potter forman un grupo llamado HP, y las tres de Star Wars en otro grupo a saber SW.
+				\[
+				\kbordermatrix{
+					&	HP & TW & SW \\
+				A	&	4  & 5  & 1  \\
+				B	&	4.67  &   &   \\ 
+				C	&	   & 2   & 4.5   \\ 
+				D	&	3   &   &   3 \\
+				}
+				\]
+\\		
+Ahora, la entrada para el usuario \textit{U} y el cluster \textit{C} es el promedio de calificaciones que el usuario \textit{U} le ha dado a los miembros del cluster \textit{C}. Si éste no ha calificado ningún ítem del grupo quedará la entrada en blanco.\\
+Si quisiéramos podemos seguir agrupando usuarios o ítems sobre la matriz resultante hasta obtener un tamaño deseable de grupos para usuarios e ítems. Luego podremos estimar las entradas en la matriz de utilidad original de la siguiente forma:\\
+Suponemos que queremos saber el valor predictivo para la entrada del ítem \textit{I} y usuario \textit{U}.\\
+\textbf{1)} Buscamos en los grupos en los que pertenecen \textit{I} y \textit{U} respectivamente, sean \textit{C} y \textit{D} dichos clusters.\\
+\textbf{2)} Si la entrada para \textit{C} y \textit{D} en la matriz de grupos tiene un valor asignado, entonces tomaremos ese valor como el valor estimado para la entrada (\textit{U},\textit{I}) en la matriz original.\\
+\textbf{3)} Si la entrada (\textit{C},\textit{D}) está en blanco, luego utilizando el método visto anteriormente para estimar esa entrada considerando clusters similares a \textit{C} o \textit{D} y usar el valor resultante para estimar la entrada (\textit{U},\textit{I}) en la matriz de utilidad.\\
+
 \section{Sistemas de recomendación sociales}
 	\subsection{Introducción}
-		Con el desarrollo de la World Wide Web, la información ha ido incrementando a escales sin precedentes. Como estudiamos al comienzo de éste capítulo, lo anterior trae consecuencias a la hora de buscar información en la Web ya que lo usuarios se encuentran ante millones de fuentes de información. Para ejemplificar lo anterior, si ingresamos el término \textit{computadora} en Amazon, devolverá millones de productos. Por lo tanto, hemos visto que un sistema recomendador es esencial en empresas de éste estilo (es decir, comercios on--line): éstos sistemas intentan abordar el problema de sobrecarga de información sugeriendo sólo aquella que son de potencial interés para los usuarios on--line. Un buen sistema recomendador puede llevar al éxito a un comercio on--line. \par
+		Con el desarrollo de Internet, la información ha ido incrementando a escalas sin precedentes. Como estudiamos al comienzo de éste capítulo, lo anterior trae consecuencias a la hora de buscar información en la Web ya que lo usuarios se encuentran ante millones de fuentes de información. Para ejemplificar lo anterior, si ingresamos el término \textit{computadora} en Amazon, devolverá millones de productos. Por lo tanto, hemos visto que un sistema recomendador es esencial en empresas de éste estilo (es decir, comercios on--line): éstos sistemas intentan abordar el problema de sobrecarga de información sugeriendo sólo aquella que son de potencial interés para los usuarios on--line. Un buen sistema recomendador puede llevar al éxito a un comercio on--line. \par
 		
-		El incremento de las redes sociales (como Facebook y Twitter, entre otras) brindan a usuarios diferentes herramientas para comunicarse digitalmente y permitir que éstos compartan ideas y opiniones con otros usuarios compartidos. Es decir, las redes sociales emergieron para, de alguna forma, \enquote{potenciar} la vida social de las personas. Las preferencias de un usuario es similar o influenciada por sus amigos socialmente conectados. Esto puede ser explicado por teorías como homofilia e influencia social. Se denomina homofilia a la tendencia de las personas a relacionarse con personas que se parecen a ellas debido a diferentes atributos como pueden ser creencias, clase social, educación, edad, etc. Es decir, usuarios con preferencias similares tienden a estar conectados. Mientras que la influencia social indica que los usuarios que están conectados tienden a tener preferencias similares. En el transcurso de nuestras vidas, las personas tienden a consumir productos los cuales fueron sugeridos por aquellas personas las cuales estamos conectados socialmente mediante alguna forma (amistad, parentesco, entre otras). Por lo tanto, las relaciones sociales pueden ser explotadas para mejorar el rendimiento de sistemas recomendadores tradicionales \cite{tang2013}.
+		El incremento de las redes sociales (como Facebook y Twitter, entre otras) brindan a usuarios diferentes herramientas para comunicarse digitalmente y permitir que éstos compartan ideas y opiniones con otros usuarios compartidos. Es decir, las redes sociales emergieron para, de alguna forma, \enquote{potenciar} la vida social de las personas en la red. Las preferencias de un usuario es similar o influenciada por sus amigos socialmente conectados. Esto puede ser explicado por teorías como homofilia e influencia social. Se denomina homofilia a la tendencia de las personas a relacionarse con personas que se parecen a ellas debido a diferentes atributos como pueden ser creencias, clase social, educación, edad, etc. Es decir, usuarios con preferencias similares tienden a estar conectados. Mientras que la influencia social indica que los usuarios que están conectados tienden a tener preferencias similares. En el transcurso de nuestras vidas, las personas tienden a consumir productos los cuales fueron sugeridos por aquellas personas las cuales estamos conectados socialmente mediante alguna forma (amistad, parentesco, entre otras). Por lo tanto, las relaciones sociales pueden ser explotadas para mejorar el rendimiento de sistemas recomendadores tradicionales \cite{tang2013}.
 		
 	\subsection{Definición de recomendador social}
 		Existen diversas definiciones sobre un recomendador social, pero ninguna comúnmente aceptada. Aquí daremos dos de ellas:
