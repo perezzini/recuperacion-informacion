@@ -36,7 +36,7 @@
 	\subsection{Utilizando un índice invertido}
 		Supongamos que tenemos una colección con 1 millón de documentos y que cada documento tenga alrededor de 1000 palabras. Típicamente, habrá alrededor de 500 mil términos distintos en cada uno de éstos documentos. Las dimensiones anteriores varían respecto a diferentes colecciones, pero nos dan una idea de los problemas que tendremos que solucionar utilizando una matriz de incidencia término--documento. Tomando la suposición anterior, debemos construir una matriz término--documento de dimensión 500K $\times$ 1M: ésta posee medio trillón de 0's y 1's, demasiados para caber en la memoria de una computadora estándar. \par
 		
-		Una representación mucho mejor es sólo recordar los términos que ocurren; es decir, sólo las posiciones 1's. Esto nos lleva a la definición de índice invertido que se desarrolló anteriormente en el Capítulo 2: mantenemos un \textit{diccionario} de términos, luego, para cada término, una lista que guarda en qué documentos el término ocurre. Cada ítem de la lista anterior es llamado \textit{posting}; éste guarda el ID del documento. \par
+		Una representación mucho mejor es sólo recordar los términos que ocurren; es decir, sólo las posiciones 1's. Esto nos lleva a la definición de índice invertido que se desarrolló anteriormente en el Capítulo 3: mantenemos un \textit{diccionario} de términos, luego, para cada término, una lista que guarda en qué documentos el término ocurre. Cada ítem de la lista anterior es llamado \textit{posting}; éste guarda el ID del documento. \par
 		
 		Para ganar beneficios de rapidez, el sistema de recuperación de información debe contruir el índice invertido antes de que un usuario realice una consulta. Se deben desarrollar los siguientes pasos:
 		\begin{enumerate}
@@ -45,7 +45,7 @@
 			\item Realizar precedimientos lingüísticos a la lista de tokens del paso 2 (\textit{Normalization}). De ésta forma se obtienen tokens normalizados los cuales, finalmente, serán los términos a indexar.
 			\item Indexar aquellos documentos en los cuales ocurren los términos obtenidos en el paso 3 creando un índice invertido.
 		\end{enumerate}
-		Los pasos 1--3 consisten en el procesamiento de textos que se desarrolló en el capítulo anterior. Mientras que la implementación del índice invertido (paso 4 de la lista anterior) se estudió en el Capítulo 2.
+		Los pasos 1--3 consisten en el procesamiento de textos. Mientras que la implementación del índice invertido (paso 4 de la lista anterior) se estudió en el Capítulo 3.
 		
 		% Figura 1.4 (manning2009)
 		
