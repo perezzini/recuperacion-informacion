@@ -15,7 +15,7 @@ Sea \textit{A} el conjunto ordenado de respuesta de un sistema aplicando la estr
 	\begin{figure}[h]
 		\includegraphics[width=8cm]{evaluation-retrieval}
 		\centering
-		\caption{Figura extraída de \cite{baeza2011}}
+		\caption{Diagrama de conjuntos. (Figura extraída de \cite{baeza2011})}
 	\end{figure}
 
 \section{Precisión}
@@ -37,10 +37,10 @@ Con esta dos medidas podemos definir una curva donde nos muestre el valor de pre
 \section{Fall-out o Proporción de fallos}
 La proporción de fallos define la fracción de los documentos no relevantes que fueron recuperados para una consulta. Representa la tasa de falsos positivos en el sistema.\\
 Resulta deseable minimizar esta variable o maximizar la exhaustividad y al mismo tiempo lograr mayor precisión en las respuestas. \\
-Siendo \textit{N} el tamaño de la colección de los documentos y denominamos \textit{FP} al subconjunto de documentos en \textit{R} que no fueron recuperados.
+Siendo \textit{N} el tamaño de la colección de los documentos, podemos definir el índice de fallos como sigue:
 
 					\begin{equation}
-						Fall-out = \cfrac{|FP|}{N}
+						Fall-out = \cfrac{|A - (R \cup A)|}{N - |R|}
 					\end{equation}
 
 %---Hablar sobre las medidas online y la diferencia con las medidas offline
