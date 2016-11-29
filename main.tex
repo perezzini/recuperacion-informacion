@@ -5,6 +5,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, top=2.50cm, bottom=2.50cm, left=2.50cm, right=2.50cm]{geometry}
 
+\usepackage{etoolbox}
+\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
+
 % Quotes
 \usepackage[autostyle]{csquotes}
 
@@ -53,7 +56,6 @@
 	{\large Facultad de Ciencias Exactas, Ingeniería y Agrimensura}\\
 	{\small Licenciatura en Ciencias de la Computación}\\
 	{\small {\itshape Bases de Datos Avanzadas}} \\
-	{\small {\itshape Docentes: Claudia Deco, Cristina Bender}} \\
 }
 
 
@@ -79,9 +81,6 @@
 		
 	\chapter{Indexado}
 		\input{chapters/indexado}
-		
-	%\chapter{Lenguajes de Consulta}
-	%	\input{chapters/lenguajes-de-consulta}
 		
 	\chapter{Modelos de Recuperación de Información}
 		\input{chapters/modelos}
